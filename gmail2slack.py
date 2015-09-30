@@ -115,10 +115,16 @@ class Gmail2Slack():
                 from_ts = arrow.get(headers['Date'], 'ddd, D MMM YYYY HH:mm:ss ZZ').timestamp
             except:
                 continue
-
             if from_ts < self.state['timestamp']:
                 break
             from_date = arrow.get(from_ts).to('US/Eastern').format('YYYY-MM-DD HH:mm:ss ZZ')
+
+            try: # supress auto-generated emails
+                auto_generated = headers['Auto-Submitted']
+                continue
+            except:
+                pass
+
             say = "<https://mail.google.com/mail/b/%s#inbox/%s|New Email>\n>From: %s\n>Date: %s\n>Subject: %s\n>\n>%s" % \
                   (self.config['gmail_user_address'],message['id'], headers['From'], from_date, headers['Subject'], message['snippet'])
             self.slack.direct_message(say, self.config['slack_user_id'], self.config['slack_from'])
