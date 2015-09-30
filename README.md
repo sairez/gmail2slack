@@ -64,6 +64,7 @@ client_secret: default_cs.json
 gmail2slack_pickle: default.pickle
 gmail2slack_oauth: default.oauth
 gmail_storage: default.gmail
+gmail_user_address: yourname@gmail.com
 ```
 
 Change foo to the slack API key
