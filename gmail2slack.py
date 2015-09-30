@@ -125,6 +125,12 @@ class Gmail2Slack():
             except:
                 pass
 
+            try: # weed out mailing lists
+                mailing_list = headers['Mailing-list']
+                continue
+            except:
+                pass
+
             say = "<https://mail.google.com/mail/b/%s#inbox/%s|New Email>\n>From: %s\n>Date: %s\n>Subject: %s\n>\n>%s" % \
                   (self.config['gmail_user_address'],message['id'], headers['From'], from_date, headers['Subject'], message['snippet'])
             self.slack.direct_message(say, self.config['slack_user_id'], self.config['slack_from'])
