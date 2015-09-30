@@ -129,6 +129,63 @@ which I saved to gmail2slack.sh and then run `crontab -e` and add a line like:
 
 Of course change the paths to match your environment
 
+## Multiple Accounts
+
+You can easily run gmail2slack for more than one gmail or google apps account simultaneously.  
+
+##### [Get a Gmail API Key](#get-a-gmail-api-key) for each account
+##### [Create separate config](#create-default_csjson-config) files for each account
+
+```
+~/.config/gmail2slack/account1.json
+~/.config/gmail2slack/account2.json
+```
+
+Replace the values in client_id and client_secret with what you generated from the gmail APi for each account
+
+##### [Create separate yaml](#create-defaultyaml) configs for each account
+
+```
+~/.config/gmail2slack/account1.yaml
+~/.config/gmail2slack/account2.yaml
+```
+
+- change the slack API key, slack user in each.
+- client_secret must match the file you created in step 2
+- gmail2slack_pickle, gmail2slack_oauth, gmail_storage will need to be renamed
+
+```
+$ cat ~/.config/gmail2slack/account1.yaml
+slack_apikey: <api key> 
+slack_user: yourname 
+slack_from: gmail2slack
+client_secret: account1.json
+gmail2slack_pickle: account1.pickle
+gmail2slack_oauth: account1.oauth
+gmail_storage: account1.gmail
+gmail_user_address: account1@gmail.com
+```
+
+```
+$ cat ~/.config/gmail2slack/account2.yaml
+slack_apikey: <api key> 
+slack_user: yourname 
+slack_from: gmail2slack
+client_secret: account2.json
+gmail2slack_pickle: account2.pickle
+gmail2slack_oauth: account2.oauth
+gmail_storage: account2.gmail
+gmail_user_address: account2@gmail.com
+```
+
+##### Modify [crontab script](#run-from-crontab)
+
+```
+#!/bin/sh
+source ~/.virtualenv/default/bin/activate
+~/github/gmail2slack/gmail2slack.py -c ~/.config/gmail2slack/account1.yaml
+~/github/gmail2slack/gmail2slack.py -c ~/.config/gmail2slack/account2.yaml
+```
 
 ## Known Issues
 
