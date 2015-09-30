@@ -131,6 +131,13 @@ class Gmail2Slack():
             except:
                 pass
 
+            try: # only allow directly addressed emails
+                to_address = headers['Delivered-To']
+            except:
+                continue
+            if to_address != self.config['gmail_user_address']:
+                continue
+
             say = "<https://mail.google.com/mail/b/%s#inbox/%s|New Email>\n>From: %s\n>Date: %s\n>Subject: %s\n>\n>%s" % \
                   (self.config['gmail_user_address'],message['id'], headers['From'], from_date, headers['Subject'], message['snippet'])
             self.slack.direct_message(say, self.config['slack_user_id'], self.config['slack_from'])
