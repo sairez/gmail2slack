@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 import pickle
 import time
 import traceback
@@ -118,8 +119,8 @@ class Gmail2Slack():
             if from_ts < self.state['timestamp']:
                 break
             from_date = arrow.get(from_ts).to('US/Eastern').format('YYYY-MM-DD HH:mm:ss ZZ')
-            say = "New Email\n>From: %s\n>Date: %s\n>Subject: %s\n>\n>%s" % \
-                  (headers['From'], from_date, headers['Subject'], message['snippet'])
+            say = "<https://mail.google.com/mail/b/%s#inbox/%s|New Email>\n>From: %s\n>Date: %s\n>Subject: %s\n>\n>%s" % \
+                  (self.config['gmail_user_address'],message['id'], headers['From'], from_date, headers['Subject'], message['snippet'])
             self.slack.direct_message(say, self.config['slack_user_id'], self.config['slack_from'])
         self.save_state()
 
