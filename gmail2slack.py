@@ -138,12 +138,12 @@ class Gmail2Slack():
             if to_address != self.config['gmail_user_address']:
                 continue
 
-            try: # no emails with brackets in the subject line
+            try: # no emails with bracket pairs in the subject line
                 subject = headers['Subject']
             except:
                 continue
-            pattern = re.compile(r"^.*\[.*\].*")
-            if pattern.match(subject):
+            pattern = re.compile(r"\[.*\]")
+            if pattern.search(subject):
                 continue
 
             say = "<https://mail.google.com/mail/b/%s#inbox/%s|New Email>\n>From: %s\n>Date: %s\n>Subject: %s\n>\n>%s" % \
